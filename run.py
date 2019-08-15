@@ -38,7 +38,8 @@ def get_config(path: str = None) -> ConfigParser:
         "port": "8001",
         "cookiename": "token",
         "adminsecret": "changeme",
-        "debug": "false"
+        "gen_token_len": 22,
+        "debug": "false",
     }
     if path is not None:
         config.read(path)

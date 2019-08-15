@@ -38,19 +38,20 @@ def _index_access(accesses: Iterable[model.Access]):
     ), accesses)
 
 
-def index(serverport: str, cookiename: str) -> str:
+def index(config: type) -> str:
     return _html(
         E.head(
             E.title("Manage access tokens"),
+            E.script("const TOKEN_LENGTH = {};".format(config['gen_token_len'])),
             E.script("", src="static/main.js")
         ),
         E.body(E.div(
             E.p(E.a("Logout", href=url_for("logout"))),
             E.p("Call the write-service like: ",
-                E.pre("http://thisMachine:{}/write".format(serverport)),
-                "with the token in a cookie named {}".format(cookiename)),
+                E.pre("http://thisMachine:{}/write".format(config['port'])),
+                "with the token in a cookie named {}".format(config['cookiename'])),
             E.p("Or directly in the url: ",
-                E.pre("http://thisMachine:{}/write/<token>".format(serverport))),
+                E.pre("http://thisMachine:{}/write/<token>".format(config['port']))),
             E.form(
                 E.input(type="hidden", name="action", value="create"),
                 E.input(name="token", placeholder="Token secret", id="tokenField"),
@@ -62,7 +63,7 @@ def index(serverport: str, cookiename: str) -> str:
             E.hr(),
             E.table(
                 E.tr(
-                    E.th("cookie: " + cookiename + " value"), E.th("Pattern"),
+                    E.th("cookie: " + config['cookiename'] + " value"), E.th("Pattern"),
                     E.th("Create Date"), E.th("Comment"), E.th()
                 ), border="1", style="width: 100%",
                 *_index_access(model.Access.select().order_by(model.Access.create_date))

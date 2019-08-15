@@ -23,7 +23,7 @@ def make_app(app, config):
             Access.create(token=request.form["token"],
                           pattern=request.form["pattern"],
                           comment=request.form["comment"])
-        return templates.index(config['port'], cookiename)
+        return templates.index(config)
 
     @app.route("/delete", methods=["POST"])
     def delete():
